@@ -6,6 +6,8 @@ Usages:
 * Sass for styling
 * [Angular CLI](https://github.com/angular/angular-cli) quickstart and managing app environments
 
+### Deployed prod [version](https://daniil-test-task.firebaseapp.com/) available
+
 ## Preparing project: 
 * clone repository to local
 * run `npm i` at application root directory to install modules
@@ -22,7 +24,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Deploys
+## Deploy
 application deploying by [Firebase](https://firebase.google.com)
 * log in using `firebase login`
 * for deployment call at application root directory `firebase deploy`
