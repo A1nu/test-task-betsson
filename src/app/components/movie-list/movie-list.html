@@ -1,0 +1,23 @@
+<div class="mdl-layout__header">
+  <div class="mdl-layout__header-row">
+    <mat-slide-toggle (toggleChange)="isFiltersShown = !isFiltersShown" [checked]="isFiltersShown">Show filters</mat-slide-toggle>
+  </div>
+</div>
+
+<div [@openClose]="isFiltersShown ? 'open' : 'closed'" class="mdl-grid open-close-container filters-holder">
+  <div class="mdl-cell--4-col" *ngFor="let item of getGenresArray()">
+    <mat-slide-toggle (toggleChange)="addFilter(item)" [checked]="filters.includes(item)">{{item}}</mat-slide-toggle>
+  </div>
+</div>
+
+<div class="mdl-grid">
+  <app-movie-item
+    *ngFor="let movie of movies$ | async"
+    [movie]="movie"
+  >
+  </app-movie-item>
+
+  <div *ngIf="(movies$ | async).length < 1">
+    There are no available content, try to change filters, or search another name.
+  </div>
+</div>

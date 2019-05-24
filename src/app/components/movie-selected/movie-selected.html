@@ -1,0 +1,31 @@
+<div class="mdl-grid movie-item">
+  <div class="mdl-cell mdl-cell--12-col">
+    <span class="mdl-chip button" (click)="goBack()">
+      <span class="mdl-chip__text">Back to collection</span>
+    </span>
+  </div>
+  <div class="mdl-cell mdl-cell--2-col mdl-cell--8-col-tablet"><img [src]="'../../../assets/images/movie-covers/' + movie.img" alt="movie image" /></div>
+  <div class="mdl-cell mdl-cell--4-col">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--12-col information" *ngIf="movie.rate.length > 0">
+        <span class="label">rating:</span>
+        {{movie.rate}}
+        <i class="material-icons star">
+          star_rate
+        </i>
+      </div>
+      <div class="mdl-cell mdl-cell--12-col information" *ngIf="movie.length.length > 0">
+        <span class="label">Length:</span>
+        {{movie.length}}
+        <i class="material-icons">
+          local_movies
+        </i>
+      </div>
+      <div class="mdl-cell mdl-cell--12-col information" *ngIf="movie.genres.length > 0">
+        <span class="label">genre: </span>
+        <span *ngFor="let item of movie.genres; let i = index">{{getMovieGenre(item, movie.genres.length, i)}} </span>
+      </div>
+    </div>
+  </div>
+  <div class="mdl-cell mdl-cell--10-col description" *ngIf="movie.description.length > 0">{{movie.description}}</div>
+</div>

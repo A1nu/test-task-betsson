@@ -1,0 +1,8 @@
+<a routerLink="/detail/{{movie.id}}">
+  <div class="demo-card-image mdl-card mdl-shadow--2dp mdl-cell mdl-cell--1-col">
+    <div class="mdl-card__title mdl-card--expand"><img [src]="getImageUrl()"></div>
+    <div class="mdl-card__actions">
+      <span class="demo-card-image__filename">{{ movie.name}}</span>
+    </div>
+  </div>
+</a>
