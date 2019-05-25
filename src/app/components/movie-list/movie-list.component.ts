@@ -36,7 +36,7 @@ import {
 			state(
 				'open',
 				style({
-					height: '200px',
+					height: window.innerWidth < 767 ? '300px' : '200px',
 					opacity: 1,
 					backgroundColor: 'gray'
 				})

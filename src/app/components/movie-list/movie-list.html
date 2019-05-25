@@ -3,9 +3,9 @@
     <mat-slide-toggle (toggleChange)="isFiltersShown = !isFiltersShown" [checked]="isFiltersShown">Show filters</mat-slide-toggle>
   </div>
 </div>
-
+<mat-slide-toggle (toggleChange)="isFiltersShown = !isFiltersShown" [checked]="isFiltersShown" class="mdl-cell--hide-desktop toggle-mobile">Show filters</mat-slide-toggle>
 <div [@openClose]="isFiltersShown ? 'open' : 'closed'" class="mdl-grid open-close-container filters-holder">
-  <div class="mdl-cell--4-col" *ngFor="let item of getGenresArray()">
+  <div class="mdl-cell--4-col mdl-cell--3-col-phone" *ngFor="let item of getGenresArray()">
     <mat-slide-toggle (toggleChange)="addFilter(item)" [checked]="filters.includes(item)">{{item}}</mat-slide-toggle>
   </div>
 </div>

@@ -6,15 +6,23 @@
       <!-- Add spacer, to align navigation to the right -->
       <div class="mdl-layout-spacer"></div>
       <!-- Navigation. We hide it in small screens. -->
+     <div class="mdl-cell--hide-tablet mdl-cell--hide-phone">
+       <form (ngSubmit)="onSubmit()" name="searchForm">
+         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+           <input class="mdl-textfield__input" [formControl]="searchForm" type="text" id="sample3" placeholder="Search...">
+         </div>
+       </form>
+     </div>
+    </div>
+  </header>
+  <main class="mdl-layout__content">
+    <div class="mdl-layout__header-row mdl-cell--hide-desktop">
       <form (ngSubmit)="onSubmit()" name="searchForm">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input class="mdl-textfield__input" [formControl]="searchForm" type="text" id="sample3" placeholder="Search...">
         </div>
       </form>
     </div>
-  </header>
-
-  <main class="mdl-layout__content">
     <router-outlet></router-outlet>
   </main>
 
@@ -22,6 +30,5 @@
 
   </footer>
 </div>
-
 
 
