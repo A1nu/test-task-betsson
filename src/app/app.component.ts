@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { IAppState } from './store/state/main';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MoviesService } from './services/movies.service';
 
 @NgModule({
 	imports: [BrowserAnimationsModule, MatButtonModule]
@@ -19,10 +20,20 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
 	title: Observable<string>;
 	searchForm = new FormControl();
-	constructor(private store: Store<IAppState>, private router: Router) {}
+	constructor(
+		private store: Store<IAppState>,
+		private router: Router,
+		private movieService: MoviesService
+	) {}
 
 	ngOnInit(): void {
+		const movies = [];
 		this.title = this.store.select(getApplicationTitle);
+		this.movieService.updateMovies().subscribe((x) => movies.push(x));
+		this.store.dispatch({
+			type: '[Movies] Add movies',
+			payload: { movies }
+		});
 	}
 
 	onSubmit() {

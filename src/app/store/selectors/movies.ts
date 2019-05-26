@@ -1,8 +1,6 @@
 import { createSelector } from '@ngrx/store';
 import { IAppState } from '../state/main';
 import { genreType } from '../../models/movie';
-import { forEach } from '@angular/router/src/utils/collection';
-import { log } from 'util';
 
 export const getMoviesState = (state: IAppState) => {
 	return state.movies;
