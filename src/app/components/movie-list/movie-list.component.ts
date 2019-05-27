@@ -9,18 +9,10 @@ import {
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Location } from '@angular/common';
-import {
-	filterByGenre,
-	filterSearchedMovies,
-	getMovies,
-	searchMovies
-} from '../../store/selectors/movies';
+import { filterMovies } from '../../store/selectors/movies';
 import { IAppState } from '../../store/state/main';
-import {
-	getQueryParams,
-	getSearchQuery
-} from '../../store/selectors/application';
-import { NavigationEnd, Router } from '@angular/router';
+import { getQueryParams } from '../../store/selectors/application';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {
 	animate,
 	state,
@@ -28,6 +20,7 @@ import {
 	transition,
 	trigger
 } from '@angular/animations';
+import qs from 'qs';
 
 @Component({
 	animations: [
@@ -70,6 +63,7 @@ export class MovieListComponent implements OnInit, OnDestroy {
 		});
 		this.location = location;
 	}
+
 	isFiltersShown = false;
 	navigationSubscription;
 	filters = [];
@@ -77,13 +71,6 @@ export class MovieListComponent implements OnInit, OnDestroy {
 
 	@Output() select = new EventEmitter();
 	movies$: Observable<Movie[]>;
-
-	static castFiltersToArray(filters) {
-		if (typeof filters === 'string') {
-			return filters.split(' ');
-		}
-		return filters;
-	}
 
 	ngOnInit() {
 		this.store.dispatch({
@@ -93,12 +80,12 @@ export class MovieListComponent implements OnInit, OnDestroy {
 
 		this.updateFromQuery();
 
-		this.getMoviesByQuery();
+		this.getMovies();
 	}
 
 	initialiseInvites(): void {
-		this.updateSearchFromQuery();
-		this.getMoviesByQuery();
+		this.updateFromQuery();
+		this.getMovies();
 	}
 
 	ngOnDestroy() {
@@ -107,30 +94,10 @@ export class MovieListComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	getMoviesByQuery() {
-		if (
-			this.search &&
-			this.search !== 'null' &&
-			this.search.length > 0 &&
-			this.filters.length > 0
-		) {
-			this.getSearchedMoviesFilteredByGenre();
-		} else if (
-			this.search &&
-			this.search.length > 0 &&
-			this.search !== 'null'
-		) {
-			console.log('search', this.search);
-			this.getMoviesByName();
-		} else if (this.filters.length > 0) {
-			this.getFilteredMovies();
-		} else {
-			this.getMovies();
-		}
-	}
-
 	private getMovies() {
-		this.movies$ = this.store.select(getMovies);
+		this.movies$ = this.store.select(
+			filterMovies({ search: this.search, filters: this.filters })
+		);
 	}
 
 	getGenresArray() {
@@ -143,66 +110,27 @@ export class MovieListComponent implements OnInit, OnDestroy {
 		} else {
 			this.filters.push(item);
 		}
-		this.store.select(getQueryParams).subscribe((x) => {
-			console.log(x);
-			const params = [];
-			if (x.search) {
-				params.push('search=' + x.search);
-			}
-			if (this.filters.length > 0) {
-				this.filters.forEach((filter) => {
-					params.push('filters[]=' + filter);
-				});
-			}
-			console.log(params);
-			if (params.length > 0) {
-				this.location.go('/movies?' + params.join('&'));
-			} else {
-				this.location.go('/movies');
-			}
-		});
-		this.getMoviesByQuery();
-	}
-
-	private getFilteredMovies() {
-		this.movies$ = this.store.select(filterByGenre(this.filters));
-	}
-
-	private getMoviesByName() {
-		this.movies$ = this.store.select(searchMovies(this.search));
-	}
-
-	private getSearchedMoviesFilteredByGenre() {
-		this.movies$ = this.store.select(
-			filterSearchedMovies(this.search, this.filters)
-		);
+		if ((this.search && this.search.length > 0) || this.filters.length > 0) {
+			this.location.go(
+				'movies?' + qs.stringify({ search: this.search, filters: this.filters })
+			);
+		} else {
+			this.location.go('movies');
+		}
+		this.getMovies();
 	}
 
 	private updateFromQuery() {
 		this.store.select(getQueryParams).subscribe((params) => {
-			if (params.search && params.search !== 'null' && params['filters[]']) {
-				this.filters = MovieListComponent.castFiltersToArray(
-					params['filters[]']
-				);
+			const query = qs.parse(params);
+			if (query.search) {
+				this.search = query.search;
+			}
+
+			if (query.filters) {
+				this.filters = query.filters;
 				this.isFiltersShown = true;
-				this.search = params.search;
-				return;
-			} else if (params['filters[]']) {
-				this.filters = MovieListComponent.castFiltersToArray(
-					params['filters[]']
-				);
-				this.isFiltersShown = true;
-				return;
-			} else if (params.search) {
-				this.search = params.search;
-				return;
-			} else {
-				this.getMovies();
 			}
 		});
-	}
-
-	private updateSearchFromQuery() {
-		this.store.select(getSearchQuery).subscribe((x) => (this.search = x));
 	}
 }

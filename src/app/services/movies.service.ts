@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { movies } from '../../assets/movie.mock-data';
 import { from } from 'rxjs';
 
@@ -7,7 +6,7 @@ import { from } from 'rxjs';
 	providedIn: 'root'
 })
 export class MoviesService {
-	constructor(private http: HttpClient) {}
+	constructor() {}
 
 	updateMovies() {
 		return from(movies);

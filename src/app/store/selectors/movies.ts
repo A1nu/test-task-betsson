@@ -17,44 +17,29 @@ export const getMovie = (id: number) =>
 		(movies) => movies.find((x) => x.id === id)
 	);
 
-export const searchMovies = (key: string) =>
+export const filterMovies = (query) =>
 	createSelector(
-		getMovies,
-		(movies) =>
-			movies.filter(
-				(item) => item.name.toLowerCase().indexOf(key.toLowerCase()) > -1
-			)
-	);
-
-export const filterByGenre = (keys: string[]) =>
-	createSelector(
-		getMovies,
+		getMoviesState,
 		(movies) => {
-			return movies.filter((item) => {
-				let filtered = true;
-				keys.forEach((key) => {
-					if (!item.genres.includes(genreType[key])) {
-						filtered = false;
-					}
-				});
-				return filtered;
-			});
-		}
-	);
+			let moviesArray = movies.movies;
 
-export const filterSearchedMovies = (search: string, filters: string[]) =>
-	createSelector(
-		searchMovies(search),
-		(movies) => {
-			console.log(movies);
-			return movies.filter((item) => {
-				let filtered = true;
-				filters.forEach((key) => {
-					if (!item.genres.includes(genreType[key])) {
-						filtered = false;
-					}
+			if (query.search && query.search.length > 0 && query.search !== 'null') {
+				moviesArray = moviesArray.filter(
+					(item) =>
+						item.name.toLowerCase().indexOf(query.search.toLowerCase()) > -1
+				);
+			}
+			if (query.filters && query.filters.length > 0) {
+				moviesArray = moviesArray.filter((item) => {
+					let filtered = true;
+					query.filters.forEach((key) => {
+						if (!item.genres.includes(genreType[key])) {
+							filtered = false;
+						}
+					});
+					return filtered;
 				});
-				return filtered;
-			});
+			}
+			return moviesArray;
 		}
 	);
