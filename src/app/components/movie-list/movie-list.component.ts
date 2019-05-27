@@ -29,7 +29,7 @@ import qs from 'qs';
 			state(
 				'open',
 				style({
-					height: window.innerWidth < 767 ? '300px' : '200px',
+					height: window.innerWidth < 767 ? '350px' : '200px',
 					opacity: 1,
 					backgroundColor: 'gray'
 				})
