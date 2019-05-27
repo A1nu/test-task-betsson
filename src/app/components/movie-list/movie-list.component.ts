@@ -125,6 +125,8 @@ export class MovieListComponent implements OnInit, OnDestroy {
 			const query = qs.parse(params);
 			if (query.search) {
 				this.search = query.search;
+			} else {
+				this.search = '';
 			}
 
 			if (query.filters) {
